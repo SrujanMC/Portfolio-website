@@ -1,0 +1,512 @@
+/* Sylva’s scroll-revealed, page-turning field guide. */
+.sketchbook {
+  --book-paper: #f0f0e9;
+  --book-ink: #272c24;
+  --book-muted: #74796e;
+  --book-width: 0px;
+  position: relative;
+  display: grid;
+  min-height: 960px;
+  padding: clamp(96px, 12vw, 156px) 28px;
+  overflow: hidden;
+  place-items: center;
+  color: #f5f6f0;
+  background:
+    radial-gradient(ellipse at 50% 82%, rgba(138, 160, 118, 0.18), transparent 48%),
+    linear-gradient(155deg, #272d26, #353c31 55%, #252c25);
+  isolation: isolate;
+}
+
+.sketchbook::before,
+.sketchbook::after {
+  position: absolute;
+  z-index: -1;
+  width: min(78vw, 1080px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(242, 246, 235, 0.055);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.sketchbook::before {
+  transform: scale(1.16);
+}
+
+.sketchbook::after {
+  transform: scale(1.42);
+}
+
+.sketchbook__inner {
+  width: min(1100px, 100%);
+}
+
+.sketchbook__intro {
+  max-width: 550px;
+  margin: 0 auto 52px;
+  text-align: center;
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition:
+    opacity 700ms ease,
+    transform 850ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.sketchbook.is-visible .sketchbook__intro {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.sketchbook__eyebrow {
+  margin-bottom: 18px;
+  color: #c4ceb8;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.sketchbook__heading {
+  font-size: clamp(38px, 5.4vw, 68px);
+  font-weight: 350;
+  letter-spacing: -0.065em;
+  line-height: 1;
+}
+
+.sketchbook__description {
+  max-width: 410px;
+  margin: 18px auto 0;
+  color: rgba(245, 246, 240, 0.67);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.sketchbook__reader {
+  opacity: 0;
+  transform: translate3d(0, 42px, 0) scale(0.98);
+  transition:
+    opacity 850ms ease 100ms,
+    transform 1050ms cubic-bezier(0.18, 0.72, 0.2, 1) 80ms;
+}
+
+.sketchbook.is-visible .sketchbook__reader {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.sketchbook__book-stage {
+  position: relative;
+  width: min(900px, calc(100% - 110px));
+  margin-inline: auto;
+  perspective: 1750px;
+  perspective-origin: 50% 46%;
+}
+
+.sketchbook__book {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 1760 / 1240;
+  overflow: visible;
+  border: 9px solid #e4e3d9;
+  border-radius: 10px;
+  background: #e8e5db;
+  box-shadow:
+    0 34px 72px rgba(0, 0, 0, 0.38),
+    0 8px 18px rgba(0, 0, 0, 0.24),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+  transform: rotateX(var(--book-rotate-x, 0deg)) rotateY(var(--book-rotate-y, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 180ms ease-out;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.sketchbook__book::after {
+  position: absolute;
+  z-index: 8;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    rgba(24, 30, 23, 0.08) 0%,
+    transparent 8%,
+    transparent 49.5%,
+    rgba(24, 30, 23, 0.16) 50%,
+    transparent 51.5%,
+    transparent 92%,
+    rgba(24, 30, 23, 0.08) 100%
+  );
+  content: "";
+  pointer-events: none;
+}
+
+.sketchbook__full {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.sketchbook__full img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.sketchbook__half {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 50%;
+  overflow: hidden;
+  background: var(--book-paper);
+}
+
+.sketchbook__half--left {
+  left: 0;
+}
+
+.sketchbook__half--right {
+  left: 50%;
+}
+
+.sketchbook__half-image {
+  display: block;
+  width: 200%;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.sketchbook__half--right .sketchbook__half-image {
+  margin-left: -100%;
+}
+
+.sketchbook__gutter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+  width: 48%;
+  opacity: calc(var(--book-shade, 0) * 0.68);
+  pointer-events: none;
+}
+
+.sketchbook__gutter--left {
+  right: 0;
+  background: linear-gradient(270deg, rgba(39, 34, 24, 0.36), transparent 84%);
+}
+
+.sketchbook__gutter--right {
+  left: 0;
+  background: linear-gradient(90deg, rgba(39, 34, 24, 0.3), transparent 84%);
+}
+
+.sketchbook__curl {
+  position: absolute;
+  top: 0;
+  z-index: 6;
+  width: calc(var(--book-width) * 0.449);
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.sketchbook__curl--next {
+  left: 50%;
+  transform: rotateY(calc(-1 * var(--book-turn, 0deg)));
+  transform-origin: left center;
+}
+
+.sketchbook__curl--previous {
+  right: 50%;
+  transform: rotateY(var(--book-turn, 0deg));
+  transform-origin: right center;
+}
+
+.sketchbook__strip {
+  position: absolute;
+  top: 0;
+  width: calc(var(--book-width) * 0.449 / var(--strip-count));
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.sketchbook__curl--next > .sketchbook__strip {
+  left: 0;
+  transform-origin: left center;
+}
+
+.sketchbook__curl--previous > .sketchbook__strip {
+  right: 0;
+  transform-origin: right center;
+}
+
+.sketchbook__curl--next .sketchbook__strip .sketchbook__strip {
+  left: 100%;
+  transform: rotateY(var(--strip-turn, 0deg));
+}
+
+.sketchbook__curl--previous .sketchbook__strip .sketchbook__strip {
+  right: 100%;
+  transform: rotateY(calc(-1 * var(--strip-turn, 0deg)));
+}
+
+.sketchbook__face {
+  position: absolute;
+  inset: 0 -1px 0 0;
+  backface-visibility: hidden;
+  background-repeat: no-repeat;
+  background-size: var(--book-width) 100%;
+  -webkit-backface-visibility: hidden;
+}
+
+.sketchbook__face--back {
+  transform: rotateY(180deg);
+}
+
+.sketchbook__face-shade,
+.sketchbook__face-glint {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0,
+    #000 5.2%,
+    #000 94.8%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(180deg, transparent 0, #000 5.2%, #000 94.8%, transparent 100%);
+  pointer-events: none;
+}
+
+.sketchbook__face-shade {
+  background: linear-gradient(
+    90deg,
+    rgba(44, 39, 29, var(--shade-a, 0)),
+    rgba(44, 39, 29, var(--shade-b, 0))
+  );
+}
+
+.sketchbook__face-glint {
+  background: #fffaf0;
+  opacity: calc(var(--book-shade, 0) * var(--strip-light, 1) * var(--strip-light, 1) * 0.18);
+}
+
+.sketchbook__curl--next .sketchbook__strip:last-child .sketchbook__face--front,
+.sketchbook__curl--previous .sketchbook__strip:last-child .sketchbook__face--back {
+  -webkit-mask-image: linear-gradient(90deg, #000 0 22%, transparent 96%);
+  mask-image: linear-gradient(90deg, #000 0 22%, transparent 96%);
+}
+
+.sketchbook__curl--next .sketchbook__strip:last-child .sketchbook__face--back,
+.sketchbook__curl--previous .sketchbook__strip:last-child .sketchbook__face--front {
+  -webkit-mask-image: linear-gradient(270deg, #000 0 22%, transparent 96%);
+  mask-image: linear-gradient(270deg, #000 0 22%, transparent 96%);
+}
+
+.sketchbook__drag-zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 7;
+  width: 50%;
+  border: 0;
+  background: transparent;
+  cursor: grab;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sketchbook__drag-zone:active {
+  cursor: grabbing;
+}
+
+.sketchbook__drag-zone--previous {
+  left: 0;
+}
+
+.sketchbook__drag-zone--next {
+  right: 0;
+}
+
+.sketchbook__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  display: grid;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid rgba(245, 246, 240, 0.18);
+  border-radius: 50%;
+  color: #f5f6f0;
+  background: rgba(29, 35, 28, 0.72);
+  cursor: pointer;
+  place-items: center;
+  transform: translateY(-50%);
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.sketchbook__arrow:hover {
+  border-color: rgba(245, 246, 240, 0.42);
+  background: rgba(56, 66, 51, 0.95);
+  transform: translateY(-50%) scale(1.06);
+}
+
+.sketchbook__arrow:disabled {
+  opacity: 0.42;
+  cursor: default;
+}
+
+.sketchbook__arrow--previous {
+  left: -58px;
+}
+
+.sketchbook__arrow--next {
+  right: -58px;
+}
+
+.sketchbook__arrow svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sketchbook__caption {
+  min-height: 28px;
+  margin: 24px 0 0;
+  color: rgba(245, 246, 240, 0.88);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.sketchbook__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 20px;
+}
+
+.sketchbook__control {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 13px;
+  border: 1px solid rgba(245, 246, 240, 0.18);
+  border-radius: 999px;
+  color: #f5f6f0;
+  background: rgba(245, 246, 240, 0.055);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.sketchbook__control:hover:not(:disabled) {
+  border-color: rgba(245, 246, 240, 0.38);
+  background: rgba(245, 246, 240, 0.12);
+}
+
+.sketchbook__control:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.sketchbook__counter {
+  min-width: 54px;
+  color: rgba(245, 246, 240, 0.64);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.12em;
+  text-align: center;
+}
+
+.sketchbook__hint {
+  margin: 14px 0 0;
+  color: rgba(245, 246, 240, 0.46);
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-align: center;
+}
+
+.sketchbook__status {
+  min-height: 20px;
+  margin: 8px 0 0;
+  color: #f0c7a8;
+  font-size: 12px;
+  text-align: center;
+}
+
+.sketchbook a:focus-visible,
+.sketchbook button:focus-visible,
+.sketchbook__book:focus-visible {
+  outline: 2px solid #e2edd5;
+  outline-offset: 4px;
+}
+
+@media (max-width: 760px) {
+  .sketchbook {
+    min-height: auto;
+    padding: 100px 22px;
+  }
+
+  .sketchbook__intro {
+    margin-bottom: 40px;
+  }
+
+  .sketchbook__book-stage {
+    width: calc(100% - 36px);
+  }
+
+  .sketchbook__book {
+    border-width: 5px;
+    border-radius: 7px;
+  }
+
+  .sketchbook__arrow {
+    width: 38px;
+    height: 38px;
+  }
+
+  .sketchbook__arrow--previous {
+    left: -43px;
+  }
+
+  .sketchbook__arrow--next {
+    right: -43px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sketchbook__intro,
+  .sketchbook__reader {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .sketchbook__book,
+  .sketchbook__arrow,
+  .sketchbook__control {
+    transition: none;
+  }
+}

@@ -1,0 +1,95 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Explore an interactive 3D solar system and the worlds that inspire Srujan M C."
+    />
+    <meta name="theme-color" content="#08090d" />
+    <title>S Srujan M C - A personal universe</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='19' fill='%2308090d' stroke='%23ead29a'/%3E%3Ctext x='20' y='27' text-anchor='middle' fill='%23ead29a' font-family='Georgia' font-size='23'%3ES%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="./solar/world.css" />
+  </head>
+  <body class="solar-page is-booting">
+    <canvas id="solar-canvas" class="solar-system-canvas" aria-hidden="true"></canvas>
+
+    <header class="solar-header">
+      <a class="solar-brand" href="./" aria-label="Return to Srujan M C's portfolio">
+        <span class="solar-brand__seal" aria-hidden="true">S</span>
+        <span class="solar-brand__text">S SRUJAN M C<small>A personal universe</small></span>
+      </a>
+      <div class="solar-header__center"><span></span> Many interests. One orbit.</div>
+      <a class="solar-return" href="./"><span aria-hidden="true">&larr;</span> Back to Sylva</a>
+    </header>
+
+    <main class="solar-copy">
+      <p class="solar-eyebrow">Many interests. One orbit.</p>
+      <h1>Worlds to<br /><em>wander through.</em></h1>
+      <p class="solar-copy__instruction">
+        <span class="solar-instruction__desktop">Drag to orbit &middot; Scroll to travel &middot; Select a planet</span>
+        <span class="solar-instruction__mobile">Drag to orbit &middot; Pinch to travel &middot; Tap a planet</span>
+      </p>
+    </main>
+
+    <nav class="body-menu" aria-label="All worlds">
+      <p class="body-menu__label">Field Guide &middot; Solar System</p>
+      <div id="body-menu" class="body-menu__list"></div>
+    </nav>
+
+    <aside
+      id="planetInfo"
+      class="planet-info"
+      role="dialog"
+      aria-labelledby="planetName"
+      aria-describedby="planetTagline"
+      aria-modal="false"
+      hidden
+    >
+      <div class="planet-info-content">
+        <button class="close-btn" id="close-info" type="button" aria-label="Close planet details">&times;</button>
+        <p class="planet-info-eyebrow">Field Guide &middot; Solar System</p>
+        <h2 id="planetName"></h2>
+        <p id="planetTagline"></p>
+        <dl class="planet-rows">
+          <div><dt>Role</dt><dd id="row-role"></dd></div>
+          <div><dt>Strength</dt><dd id="row-strength"></dd></div>
+          <div><dt>Currently exploring</dt><dd id="row-exploring"></dd></div>
+          <div><dt>Fun fact</dt><dd id="row-fact"></dd></div>
+        </dl>
+        <div id="moon-chips" class="moon-chips" hidden></div>
+      </div>
+    </aside>
+
+    <div class="hover-label" id="hover-label" hidden></div>
+
+    <div class="solar-loading" id="loading-screen" role="status" aria-live="polite">
+      <p id="loading-status">Preparing the solar system</p>
+      <div class="solar-loading__track" aria-hidden="true"><span id="loading-bar"></span></div>
+    </div>
+
+    <div class="webgl-fallback" id="webgl-fallback" hidden>
+      <p>This universe needs WebGL, and this browser cannot start it.</p>
+      <a href="./">Back to Sylva</a>
+    </div>
+
+    <footer class="solar-footer">
+      <p>Worlds to wander through.</p>
+      <a href="https://github.com/N3rson/Solar-System-3D" target="_blank" rel="noreferrer noopener">
+        Solar System by N3rson <span aria-hidden="true">&nearr;</span>
+      </a>
+    </footer>
+
+    <script type="module" src="solar/world.js"></script>
+  </body>
+</html>
+
+
+
+
+
+
